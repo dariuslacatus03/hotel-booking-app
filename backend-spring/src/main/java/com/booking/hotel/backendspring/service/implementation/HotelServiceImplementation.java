@@ -17,6 +17,12 @@ import java.util.Optional;
 public class HotelServiceImplementation implements HotelService {
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
+
+    @Override
+    public List<Hotel> getAllHotels() {
+        return hotelRepository.findAll();
+    }
+
     @Override
     public Hotel addHotel(Hotel hotelToAdd) {
         return hotelRepository.save(hotelToAdd);
@@ -24,23 +30,20 @@ public class HotelServiceImplementation implements HotelService {
 
     @Override
     public Room addRoomToHotel(Long hotelId, Room roomToAdd) {
-        Optional<Hotel> hotel = hotelRepository.findById(hotelId);
-        hotel.ifPresentOrElse(
-                hotelEntity -> {
-                    roomToAdd.setHotel(hotelEntity);
-                    hotelEntity.getRooms().add(roomToAdd);
-                    hotelRepository.save(hotelEntity);
-                    roomRepository.save(roomToAdd);
-                },
-                () -> {
-                    throw new EntityNotFoundException("Hotel not found with ID: " + hotelId);
-                });
+        Optional<Hotel> hotelOptional = hotelRepository.findById(hotelId);
+        if (hotelOptional.isEmpty())
+        {
+            throw new EntityNotFoundException("Hotel not found");
+        }
+        else
+        {
+            Hotel hotelEntity = hotelOptional.get();
+            roomToAdd.setHotel(hotelEntity);
+            hotelEntity.getRooms().add(roomToAdd);
+            hotelRepository.save(hotelEntity);
+            roomRepository.save(roomToAdd);
+        }
         return roomToAdd;
-    }
-
-    @Override
-    public List<Hotel> getAllHotels() {
-        return hotelRepository.findAll();
     }
 
     @Override

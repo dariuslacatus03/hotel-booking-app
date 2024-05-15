@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,6 +23,9 @@ public class Room {
     private int type;
     private double price;
     private boolean is_available;
+
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
+    private List<Reservation> roomReservations;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)

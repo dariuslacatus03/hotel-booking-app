@@ -18,6 +18,12 @@ import java.util.List;
 public class HotelController {
     private final HotelService hotelService;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<HotelDTO>> getAllHotels()
+    {
+        return ResponseEntity.ok(HotelDTO.convertListToDTO(hotelService.getAllHotels()));
+    }
+
     @PostMapping(path = "/add-hotel")
     public ResponseEntity<Hotel> addHotel(@RequestBody Hotel hotelToAdd)
     {
@@ -28,12 +34,6 @@ public class HotelController {
     public ResponseEntity<RoomDTO> addRoomToHotel(@PathVariable Long hotelId, @RequestBody Room roomToAdd)
     {
         return ResponseEntity.ok(RoomDTO.convertToDTO(hotelService.addRoomToHotel(hotelId, roomToAdd)));
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<HotelDTO>> getAllHotels()
-    {
-        return ResponseEntity.ok(HotelDTO.convertListToDTO(hotelService.getAllHotels()));
     }
 
     @GetMapping("/radius")
