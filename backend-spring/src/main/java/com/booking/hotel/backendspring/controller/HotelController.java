@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/hotels")
+@CrossOriging
 public class HotelController {
     private final HotelService hotelService;
 
