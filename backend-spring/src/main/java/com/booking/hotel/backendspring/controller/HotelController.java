@@ -3,6 +3,7 @@ package com.booking.hotel.backendspring.controller;
 import com.booking.hotel.backendspring.dtos.HotelDTO;
 import com.booking.hotel.backendspring.dtos.RoomDTO;
 import com.booking.hotel.backendspring.model.Hotel;
+import com.booking.hotel.backendspring.model.Location;
 import com.booking.hotel.backendspring.model.Room;
 import com.booking.hotel.backendspring.service.HotelService;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,8 @@ public class HotelController {
     }
 
     @GetMapping("/radius")
-    public ResponseEntity<List<Hotel>> getHotelsInRadius(@RequestParam("radius") double radius) {
-        //TO DO
-        return null;
+    public ResponseEntity<List<HotelDTO>> getHotelsInRadius(@RequestParam("radius") double radius,
+                                                            @RequestBody Location currentLocation) {
+        return ResponseEntity.ok(HotelDTO.convertListToDTO(hotelService.getHotelsInRadius(radius, currentLocation)));
     }
 }

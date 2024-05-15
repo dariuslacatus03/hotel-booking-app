@@ -1,6 +1,7 @@
 package com.booking.hotel.backendspring.service.implementation;
 
 import com.booking.hotel.backendspring.model.Hotel;
+import com.booking.hotel.backendspring.model.Location;
 import com.booking.hotel.backendspring.model.Room;
 import com.booking.hotel.backendspring.repository.HotelRepository;
 import com.booking.hotel.backendspring.repository.RoomRepository;
@@ -9,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +49,27 @@ public class HotelServiceImplementation implements HotelService {
     }
 
     @Override
-    public List<Hotel> getHotelsInRadius(double radius) {
-        //TO DO
-        return null;
+    public List<Hotel> getHotelsInRadius(double radius, Location currentLocation) {
+        List<Hotel> hotelsInRadius = new ArrayList<>();
+
+        double[] currentLocationMeters = Location.toMeters(currentLocation.getLatitude(), currentLocation.getLongitude());
+        double currentLatitudeMeters = currentLocationMeters[0];
+        double currentLongitudeMeters = currentLocationMeters[1];
+
+        for (Hotel hotel : hotelRepository.findAll()) {
+            double[] hotelLocationMeters = Location.toMeters(hotel.getLatitude(), hotel.getLongitude());
+            double hotelLatitudeMeters = hotelLocationMeters[0];
+            double hotelLongitudeMeters = hotelLocationMeters[1];
+
+            double distance = Math.sqrt(
+                            Math.pow(currentLatitudeMeters - hotelLatitudeMeters, 2) +
+                            Math.pow(currentLongitudeMeters - hotelLongitudeMeters, 2)
+            );
+
+            if (distance <= radius * 1000) {
+                hotelsInRadius.add(hotel);
+            }
+        }
+        return hotelsInRadius;
     }
 }

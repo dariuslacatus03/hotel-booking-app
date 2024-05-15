@@ -1,6 +1,7 @@
 package com.booking.hotel.backendspring.service;
 
 import com.booking.hotel.backendspring.model.Hotel;
+import com.booking.hotel.backendspring.model.Location;
 import com.booking.hotel.backendspring.model.Room;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface HotelService {
 
     Room addRoomToHotel(Long hotelId, Room roomToAdd);
 
-    List<Hotel> getHotelsInRadius(double radius);
+    List<Hotel> getHotelsInRadius(double radius, Location currentLocation);
 }
