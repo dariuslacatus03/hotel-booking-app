@@ -1,50 +1,55 @@
-// import the required react libraries
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Home from './components/home/Home';
+import HotelService from './service/HotelService';
 
 function App() {
-  // const variable array to save the users location
   const [userLocation, setUserLocation] = useState(null);
+  const [hotelList, setHotelList] = useState([]);
 
-  // define the function that finds the users geolocation
-  const getUserLocation = () => {
-    // if geolocation is supported by the users browser
-    if (navigator.geolocation) {
-      // get the current users location
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          // save the geolocation coordinates in two variables
-          const { latitude, longitude } = position.coords;
-          // update the value of userlocation variable
-          setUserLocation({ latitude, longitude });
-        },
-        // if there was an error getting the users location
-        (error) => {
-          console.error('Error getting user location:', error);
-        }
-      );
-    }
-    // if geolocation is not supported by the users browser
-    else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  };
+  useEffect(() => {
+        HotelService.getAllHotels().then((data) => {
+          console.log(data);
+          setHotelList(data);
+        }).catch((error) => {
+          console.log(error);
+        });
+}, [])
 
-  // return an HTML page for the user to check their location
+  useEffect(() => {
+    const getUserLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ latitude, longitude });
+          },
+          (error) => {
+            console.error('Error getting user location:', error);
+          }
+        );
+      }
+      else {
+        console.error('Geolocation is not supported by this browser.');
+      }
+    };
+
+    getUserLocation();
+  }, []);
+
   return (
     <div>
-      <h1>Geolocation App</h1>
-      {/* create a button that is mapped to the function which retrieves the users location */}
-      <button onClick={getUserLocation}>Get User Location</button>
-      {/* if the user location variable has a value, print the users location */}
-      {userLocation && (
-        <div>
-          <h2>User Location</h2>
-          <p>Latitude: {userLocation.latitude}</p>
-          <p>Longitude: {userLocation.longitude}</p>
-        </div>
-      )}
+        <Router>
+            <Routes>
+                <Route path='/' element={ 
+                <Home 
+                  userLocation = {userLocation}
+                  hotelList = {hotelList}  
+                /> }/>
+            </Routes>
+        </Router>
     </div>
-  );
+);
 }
 
 export default App;
