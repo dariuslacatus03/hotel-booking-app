@@ -26,6 +26,17 @@ public class HotelServiceImplementation implements HotelService {
     }
 
     @Override
+    public List<Room> getRoomsOfHotel(Long hotelId) {
+        List<Room> hotelRooms = new ArrayList<>();
+        for (Room room : roomRepository.findAll())
+        {
+            if (hotelId.equals(room.getHotel().getId()))
+                hotelRooms.add(room);
+        }
+        return hotelRooms;
+    }
+
+    @Override
     public Hotel addHotel(Hotel hotelToAdd) {
         return hotelRepository.save(hotelToAdd);
     }

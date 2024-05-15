@@ -25,6 +25,12 @@ public class HotelController {
         return ResponseEntity.ok(HotelDTO.convertListToDTO(hotelService.getAllHotels()));
     }
 
+    @GetMapping("/{hotelId}/get")
+    public ResponseEntity<List<RoomDTO>> getRoomsOfHotel(@PathVariable Long hotelId)
+    {
+        return ResponseEntity.ok(RoomDTO.convertListToDTO(hotelService.getRoomsOfHotel(hotelId)));
+    }
+
     @PostMapping(path = "/add-hotel")
     public ResponseEntity<Hotel> addHotel(@RequestBody Hotel hotelToAdd)
     {

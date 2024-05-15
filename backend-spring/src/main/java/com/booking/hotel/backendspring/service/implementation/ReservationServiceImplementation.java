@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,17 @@ public class ReservationServiceImplementation implements ReservationService {
     @Override
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
+    }
+
+    @Override
+    public List<Reservation> getReservationsOfRoom(Long roomId){
+        List<Reservation> reservationsOfRoom = new ArrayList<>();
+        for (Reservation reservation : reservationRepository.findAll())
+        {
+            if (roomId.equals(reservation.getRoom().getId()))
+                reservationsOfRoom.add(reservation);
+        }
+        return reservationsOfRoom;
     }
 
     @Override

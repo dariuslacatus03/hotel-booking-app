@@ -13,6 +13,7 @@ import java.util.List;
 public class RoomServiceImplementation implements RoomService {
     private final RoomRepository roomRepository;
 
+    //testing purposes
     @Override
     public List<Room> getAllRooms() {
         return roomRepository.findAll();

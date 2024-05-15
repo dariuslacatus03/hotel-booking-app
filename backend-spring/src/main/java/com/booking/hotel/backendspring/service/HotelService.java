@@ -9,6 +9,8 @@ import java.util.List;
 public interface HotelService {
     List<Hotel> getAllHotels();
 
+    List<Room> getRoomsOfHotel(Long hotelId);
+
     //function made for testing purposes
     Hotel addHotel(Hotel hotelToAdd);
 

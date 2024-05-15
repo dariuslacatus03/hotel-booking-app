@@ -21,6 +21,12 @@ public class ReservationController {
         return ResponseEntity.ok(ReservationDTO.convertListToDTO(reservationService.getAllReservations()));
     }
 
+    @GetMapping("/{roomId}/get")
+    public ResponseEntity<List<ReservationDTO>> getReservationsOfRoom(@PathVariable Long roomId)
+    {
+        return ResponseEntity.ok(ReservationDTO.convertListToDTO(reservationService.getReservationsOfRoom(roomId)));
+    }
+
     @PostMapping(path = "/{roomId}/add-reservation")
     public ResponseEntity<ReservationDTO> addReservation(@RequestBody Reservation reservation, @PathVariable Long roomId)
     {

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ReservationService {
     List<Reservation> getAllReservations();
+    List<Reservation> getReservationsOfRoom(Long roomId);
     Reservation addReservation(Reservation reservation, Long roomId);
     Boolean deleteReservation(Long reservationId);
 }
