@@ -10,6 +10,7 @@ export default function Reservations({selectedRoom}){
     const [reservationsOfRoom, setReservationsOfRoom] = useState(null);
     const [checkIn, setCheckIn] = useState(dayjs().hour(10).minute(0).second(0));
     const [checkOut, setCheckOut] = useState(dayjs().hour(10).minute(0).second(0));
+    const [addErrorMessage, setAddErrorMessage] = useState(null);
 
     useEffect(() => {
         if (selectedRoom) {
@@ -30,10 +31,16 @@ export default function Reservations({selectedRoom}){
         };
         ReservationService.addReservationToRoom(selectedRoom.id, reservation)
                 .then(newReservation => {
+                    console.log("THIS IS IS THEN");
                     setReservationsOfRoom([...reservationsOfRoom, newReservation])
+                    setAddErrorMessage(null);
                 })
                 .catch(error => {
                     console.log("Error making reservation:", error);
+                    console.log("THIS IS IN CATCH");
+                    if (error.response && error.response.data) {
+                        setAddErrorMessage(error.response.data);
+                    }
                 })
     };
 
@@ -42,6 +49,9 @@ export default function Reservations({selectedRoom}){
             Make a rezervation for room {selectedRoom.roomNumber} <br />
             <DatePickerValue checkIn={checkIn} setCheckIn={setCheckIn} checkOut={checkOut} setCheckOut={setCheckOut}/>
             <Button onClick={handleReservationButton}>Make reservation</Button>
+            {addErrorMessage !== null && (
+                <p>{addErrorMessage}</p>
+            )}
             {reservationsOfRoom !== null && (
                 <ActiveReservations reservationsOfRoom={reservationsOfRoom} setReservationsOfRoom={setReservationsOfRoom}/>
             )}

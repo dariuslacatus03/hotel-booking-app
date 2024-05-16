@@ -4,6 +4,7 @@ import com.booking.hotel.backendspring.dtos.ReservationDTO;
 import com.booking.hotel.backendspring.model.Reservation;
 import com.booking.hotel.backendspring.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +30,15 @@ public class ReservationController {
     }
 
     @PostMapping(path = "/{roomId}/add-reservation")
-    public ResponseEntity<ReservationDTO> addReservation(@RequestBody Reservation reservation, @PathVariable Long roomId)
+    public ResponseEntity<?> addReservation(@RequestBody Reservation reservation, @PathVariable Long roomId)
     {
-        return ResponseEntity.ok(ReservationDTO.convertToDTO(reservationService.addReservation(reservation, roomId)));
+        try{
+            return ResponseEntity.ok(ReservationDTO.convertToDTO(reservationService.addReservation(reservation, roomId)));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @DeleteMapping(path = "/delete/{reservationId}")

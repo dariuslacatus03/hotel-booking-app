@@ -16,7 +16,7 @@ class ReservationService{
             const response = await axios.post('http://localhost:8080/api/reservations/' + roomId + '/add-reservation', reservation);
             return response.data;
         } catch (error) {
-            console.log(error)
+            throw error
         }
     }
 

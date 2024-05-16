@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,15 @@ public class ReservationServiceImplementation implements ReservationService {
     public Reservation addReservation(Reservation reservation, Long roomId) {
         if (reservation.getStartDate().isAfter(reservation.getEndDate()))
         {
-            throw new InvalidParameterException("Invalid date");
+            throw new InvalidParameterException("Start date cannot be after end date");
+        }
+        if (reservation.getStartDate().isEqual(reservation.getEndDate()))
+        {
+            throw new InvalidParameterException("Start date cannot be equal to end date");
+        }
+        LocalDate currentDate = LocalDate.now();
+        if (reservation.getStartDate().isBefore(currentDate.atStartOfDay())) {
+            throw new InvalidParameterException("Start date cannot be before current date");
         }
         Optional<Room> roomOptional = roomRepository.findById(roomId);
         if (roomOptional.isEmpty())
@@ -60,21 +69,22 @@ public class ReservationServiceImplementation implements ReservationService {
             }
             else
             {
-                throw new InvalidParameterException("Invalid date");
+                throw new InvalidParameterException("Your reservation intersects another one");
             }
         }
         return reservation;
     }
     private static boolean isValidReservation(LocalDateTime start, LocalDateTime end, Room roomEntity) {
-        boolean validReservation = true;
         for (Reservation reservation : roomEntity.getRoomReservations())
         {
+            if (reservation.getStartDate().isEqual(start) || reservation.getEndDate().isEqual(end))
+                return false;
             if (reservation.getStartDate().isBefore(start) && reservation.getEndDate().isAfter(start))
-                validReservation = false;
+                return false;
             if (reservation.getStartDate().isAfter(start) && reservation.getStartDate().isBefore(end))
-                validReservation = false;
+                return false;
         }
-        return validReservation;
+        return true;
     }
 
     @Override
