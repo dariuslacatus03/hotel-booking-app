@@ -31,13 +31,11 @@ export default function Reservations({selectedRoom}){
         };
         ReservationService.addReservationToRoom(selectedRoom.id, reservation)
                 .then(newReservation => {
-                    console.log("THIS IS IS THEN");
                     setReservationsOfRoom([...reservationsOfRoom, newReservation])
                     setAddErrorMessage(null);
                 })
                 .catch(error => {
                     console.log("Error making reservation:", error);
-                    console.log("THIS IS IN CATCH");
                     if (error.response && error.response.data) {
                         setAddErrorMessage(error.response.data);
                     }
