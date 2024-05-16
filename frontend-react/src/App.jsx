@@ -2,18 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Home from './components/home/Home';
 import HotelService from './service/HotelService';
+import Header from './components/header/Header';
+import "./App.css";
 
 function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [hotelList, setHotelList] = useState([]);
 
   useEffect(() => {
-        HotelService.getAllHotels().then((data) => {
-          console.log(data);
-          setHotelList(data);
-        }).catch((error) => {
-          console.log(error);
-        });
+        HotelService.getAllHotels()
+          .then(hotels => {
+            setHotelList(hotels);
+          })
+          .catch(error => {
+            console.log(error);
+          });
 }, [])
 
   useEffect(() => {
@@ -38,13 +41,15 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className='main-layout'>
+        <Header />
         <Router>
             <Routes>
-                <Route path='/' element={ 
+                <Route path='/' element={
                 <Home 
                   userLocation = {userLocation}
-                  hotelList = {hotelList}  
+                  hotelList = {hotelList}
+                  setHotelList={setHotelList}
                 /> }/>
             </Routes>
         </Router>
