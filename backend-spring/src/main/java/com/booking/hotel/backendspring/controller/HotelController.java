@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/hotels")
-@CrossOriging
+@CrossOrigin
 public class HotelController {
     private final HotelService hotelService;
 
@@ -46,7 +46,9 @@ public class HotelController {
 
     @GetMapping("/radius")
     public ResponseEntity<List<HotelDTO>> getHotelsInRadius(@RequestParam("radius") double radius,
-                                                            @RequestBody Location currentLocation) {
+                                                            @RequestParam("latitude") double latitude,
+                                                            @RequestParam("longitude") double longitude) {
+        Location currentLocation = new Location(latitude, longitude);
         return ResponseEntity.ok(HotelDTO.convertListToDTO(hotelService.getHotelsInRadius(radius, currentLocation)));
     }
 }

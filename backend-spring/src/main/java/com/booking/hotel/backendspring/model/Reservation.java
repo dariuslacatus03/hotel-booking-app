@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "reservation")
 public class Reservation {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDateTime startDate;

@@ -12,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/api/reservations")
+@CrossOrigin
 public class ReservationController {
     private final ReservationService reservationService;
 

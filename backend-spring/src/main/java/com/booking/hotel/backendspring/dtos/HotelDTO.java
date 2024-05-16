@@ -16,14 +16,14 @@ import java.util.List;
 public class HotelDTO {
     private Long id;
     private String name;
-    private double latitude;
-    private double longitude;
-    private List<RoomDTO> rooms;
+    private Double latitude;
+    private Double longitude;
+    private Integer numberOfRooms;
 
     public static HotelDTO convertToDTO(Hotel hotelToConvert)
     {
         return new HotelDTO(hotelToConvert.getId(), hotelToConvert.getName(), hotelToConvert.getLatitude(),
-                hotelToConvert.getLongitude(), RoomDTO.convertListToDTO(hotelToConvert.getRooms()));
+                hotelToConvert.getLongitude(), hotelToConvert.getRooms().size());
     }
 
     public static List<HotelDTO> convertListToDTO(List<Hotel> hotelsToConvert)

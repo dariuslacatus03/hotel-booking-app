@@ -16,13 +16,12 @@ import java.util.List;
 @Table(name="room")
 public class Room {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int room_number;
-    private int type;
-    private double price;
-    private boolean is_available;
+    private Integer room_number;
+    private Integer type;
+    private Double price;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
     private List<Reservation> roomReservations;

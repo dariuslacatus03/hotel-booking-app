@@ -13,15 +13,14 @@ import java.util.List;
 @AllArgsConstructor
 public class RoomDTO {
     private Long id;
-    private int roomNumber;
-    private int type;
-    private double price;
-    private boolean available;
+    private Integer roomNumber;
+    private Integer type;
+    private Double price;
 
     public static RoomDTO convertToDTO(Room roomToConvert)
     {
         return new RoomDTO(roomToConvert.getId(), roomToConvert.getRoom_number(), roomToConvert.getType(),
-                roomToConvert.getPrice(), roomToConvert.is_available());
+                roomToConvert.getPrice());
     }
 
     public static List<RoomDTO> convertListToDTO(List<Room> roomsToConvert)
