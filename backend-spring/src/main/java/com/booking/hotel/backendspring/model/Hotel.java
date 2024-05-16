@@ -25,4 +25,7 @@ public class Hotel {
 
     @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER)
     private List<Room> rooms;
+
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER)
+    private List<Review> reviews;
 }

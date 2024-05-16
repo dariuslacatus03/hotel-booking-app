@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -89,8 +90,17 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public Boolean deleteReservation(Long reservationId) {
-        if (reservationRepository.findById(reservationId).isEmpty())
+        Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
+        if (reservationOptional.isEmpty())
             return Boolean.FALSE;
+        Reservation reservationEntity = reservationOptional.get();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Duration duration = Duration.between(reservationEntity.getStartDate(), currentDateTime);
+        long hours = duration.toHours();
+        if (hours < 12)
+        {
+            throw new RuntimeException("Reservations cannot be canceled 12 hours before start date");
+        }
         reservationRepository.deleteById(reservationId);
         return Boolean.TRUE;
     }

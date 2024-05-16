@@ -19,11 +19,12 @@ public class HotelDTO {
     private Double latitude;
     private Double longitude;
     private Integer numberOfRooms;
+    private Integer numberOfReviews;
 
     public static HotelDTO convertToDTO(Hotel hotelToConvert)
     {
         return new HotelDTO(hotelToConvert.getId(), hotelToConvert.getName(), hotelToConvert.getLatitude(),
-                hotelToConvert.getLongitude(), hotelToConvert.getRooms().size());
+                hotelToConvert.getLongitude(), hotelToConvert.getRooms().size(), hotelToConvert.getReviews().size());
     }
 
     public static List<HotelDTO> convertListToDTO(List<Hotel> hotelsToConvert)

@@ -42,8 +42,14 @@ public class ReservationController {
     }
 
     @DeleteMapping(path = "/delete/{reservationId}")
-    public ResponseEntity<Boolean> deleteReservation(@PathVariable Long reservationId)
+    public ResponseEntity<?> deleteReservation(@PathVariable Long reservationId)
     {
-        return ResponseEntity.ok(reservationService.deleteReservation(reservationId));
+        try{
+            return ResponseEntity.ok(reservationService.deleteReservation(reservationId));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

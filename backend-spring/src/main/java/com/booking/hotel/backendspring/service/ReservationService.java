@@ -2,7 +2,6 @@ package com.booking.hotel.backendspring.service;
 
 import com.booking.hotel.backendspring.model.Reservation;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReservationService {
