@@ -1,11 +1,8 @@
 package com.booking.hotel.backendspring.service.implementation;
 
 import com.booking.hotel.backendspring.model.Reservation;
-import com.booking.hotel.backendspring.model.Room;
 import com.booking.hotel.backendspring.repository.ReservationRepository;
-import com.booking.hotel.backendspring.repository.RoomRepository;
 import com.booking.hotel.backendspring.service.ReservationService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +18,6 @@ import java.util.Optional;
 @Service
 public class ReservationServiceImplementation implements ReservationService {
     private final ReservationRepository reservationRepository;
-    private final RoomRepository roomRepository;
     @Override
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
@@ -32,60 +28,14 @@ public class ReservationServiceImplementation implements ReservationService {
         List<Reservation> reservationsOfRoom = new ArrayList<>();
         for (Reservation reservation : reservationRepository.findAll())
         {
-            if (roomId.equals(reservation.getRoom().getId()))
+            if (reservation.getEndDate().isBefore(LocalDateTime.now()))
+            {
+                reservationRepository.deleteById(reservation.getId());
+            }
+            else if (roomId.equals(reservation.getRoom().getId()))
                 reservationsOfRoom.add(reservation);
         }
         return reservationsOfRoom;
-    }
-
-    @Override
-    public Reservation addReservation(Reservation reservation, Long roomId) {
-        if (reservation.getStartDate().isAfter(reservation.getEndDate()))
-        {
-            throw new InvalidParameterException("Start date cannot be after end date");
-        }
-        if (reservation.getStartDate().isEqual(reservation.getEndDate()))
-        {
-            throw new InvalidParameterException("Start date cannot be equal to end date");
-        }
-        LocalDate currentDate = LocalDate.now();
-        if (reservation.getStartDate().isBefore(currentDate.atStartOfDay())) {
-            throw new InvalidParameterException("Start date cannot be before current date");
-        }
-        Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (roomOptional.isEmpty())
-        {
-            throw new EntityNotFoundException("Room not found");
-        }
-        else
-        {
-            Room roomEntity = roomOptional.get();
-            boolean validReservation = isValidReservation(reservation.getStartDate(), reservation.getEndDate(), roomEntity);
-            if (validReservation)
-            {
-                reservation.setRoom(roomEntity);
-                roomEntity.getRoomReservations().add(reservation);
-                roomRepository.save(roomEntity);
-                reservationRepository.save(reservation);
-            }
-            else
-            {
-                throw new InvalidParameterException("Your reservation intersects another one");
-            }
-        }
-        return reservation;
-    }
-    private static boolean isValidReservation(LocalDateTime start, LocalDateTime end, Room roomEntity) {
-        for (Reservation reservation : roomEntity.getRoomReservations())
-        {
-            if (reservation.getStartDate().isEqual(start) || reservation.getEndDate().isEqual(end))
-                return false;
-            if (reservation.getStartDate().isBefore(start) && reservation.getEndDate().isAfter(start))
-                return false;
-            if (reservation.getStartDate().isAfter(start) && reservation.getStartDate().isBefore(end))
-                return false;
-        }
-        return true;
     }
 
     @Override
@@ -95,11 +45,11 @@ public class ReservationServiceImplementation implements ReservationService {
             return Boolean.FALSE;
         Reservation reservationEntity = reservationOptional.get();
         LocalDateTime currentDateTime = LocalDateTime.now();
-        Duration duration = Duration.between(reservationEntity.getStartDate(), currentDateTime);
+        Duration duration = Duration.between(currentDateTime, reservationEntity.getStartDate());
         long hours = duration.toHours();
-        if (hours < 12)
+        if (hours > 0 && hours < 24)
         {
-            throw new RuntimeException("Reservations cannot be canceled 12 hours before start date");
+            throw new RuntimeException("Reservations cannot be canceled 24 hours before start date");
         }
         reservationRepository.deleteById(reservationId);
         return Boolean.TRUE;

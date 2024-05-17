@@ -23,7 +23,7 @@ public class Room {
     private Integer type;
     private Double price;
 
-    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Reservation> roomReservations;
 
     @ManyToOne

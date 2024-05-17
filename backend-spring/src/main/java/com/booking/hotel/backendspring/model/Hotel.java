@@ -23,9 +23,9 @@ public class Hotel {
     private Double latitude;
     private Double longitude;
 
-    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Room> rooms;
 
-    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Review> reviews;
 }
