@@ -10,7 +10,7 @@ export default function DatePickerValue({checkIn, setCheckIn, checkOut, setCheck
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker', 'DatePicker']}>
+      <DemoContainer sx={{flexDirection:"row", justifyContent:"center"}} components={['DatePicker', 'DatePicker']}>
         <DatePicker
           label="Check in"
           value={checkIn}

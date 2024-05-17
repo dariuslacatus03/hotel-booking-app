@@ -1,32 +1,33 @@
-import Hotels from "../hotels/Hotels";
-import Content from "../content/Content";
-import "./Home.css"
+import AdminHeader from "../header/AdminHeader";
+import AdminHotels from "./components/adminhotels/AdminHotels";
+import AdminContent from "./components/admincontent/AdminContent";
 import { useState } from "react";
-import Header from "../header/Header";
 
-export default function Home({ userLocation, hotelList, setHotelList }) {
+export default function AdminPanel({hotelList, setHotelList}){
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [roomsOfHotel, setRoomsOfHotel] = useState(null);
+    
 
-    return (
+    return(
         <>
-            <Header />
-            <Hotels 
-                hotelList = {hotelList} 
+            <AdminHeader />
+            <AdminHotels 
+                hotelList={hotelList}
                 setHotelList={setHotelList}
                 setSelectedHotel={setSelectedHotel}
-                userLocation={userLocation}
-                setRoomsOfHotel={setRoomsOfHotel}
                 setSelectedRoom={setSelectedRoom}
                 />
-            <Content 
+            <AdminContent 
                 selectedHotel={selectedHotel}
+                setSelectedHotel={setSelectedHotel}
                 roomsOfHotel={roomsOfHotel}
                 setRoomsOfHotel={setRoomsOfHotel}
                 selectedRoom={selectedRoom}
-                setSelectedRoom={setSelectedRoom}/>
+                setSelectedRoom={setSelectedRoom}
+                hotelList={hotelList}
+                setHotelList={setHotelList}
+                />
         </>
-    );
-  }
-  
+    )
+}

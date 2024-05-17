@@ -30,11 +30,11 @@ export default function ActiveReservations({reservationsOfRoom, setReservationsO
                 {reservationsOfRoom.map(reservation => (
                                 <li data-testid={"list-item"} key={reservation.id}>
                                         <p>
-                                            Reservation {reservation.id}: <br />
+                                            <b>Reservation</b> <br />
                                             Check in: {reservation.startDate} <br />
                                             Check out: {reservation.endDate} <br />
                                         </p>
-                                        <Button onClick={() => handleDeleteButton(reservation.id)}>Delete</Button>
+                                        <Button sx={{color:"red"}} onClick={() => handleDeleteButton(reservation.id)}>Delete</Button>
                                 </li>
                     ))}
             </ul>

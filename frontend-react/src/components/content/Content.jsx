@@ -6,6 +6,7 @@ import { Box, Button, Rating, TextField, ratingClasses, } from "@mui/material";
 import Reservations from "../reservations/Reservations";
 import ReviewService from "../../service/ReviewService";
 import Reviews from "../reviews/Reviews";
+import RoomService from "../../service/RoomService";
 
 function calculateAverageRating(reviews) {
     if (!reviews || reviews.length === 0) {
@@ -17,13 +18,14 @@ function calculateAverageRating(reviews) {
     return averageRating.toFixed(2);
 }
 
+
 export default function Content({ selectedHotel, roomsOfHotel, setRoomsOfHotel, selectedRoom, setSelectedRoom}) {
     
     const [reviewsOfHotel, setReviewsOfHotel] = useState(null)
 
     useEffect(() => {
         if (selectedHotel) {
-            HotelService.getRoomsOfHotel(selectedHotel.id)
+            RoomService.getRoomsOfHotel(selectedHotel.id)
                 .then(rooms => {
                     setRoomsOfHotel(rooms);
                 })
@@ -59,7 +61,7 @@ export default function Content({ selectedHotel, roomsOfHotel, setRoomsOfHotel, 
             reviewText: review,
             rating: rating
         }
-        ReviewService.addReviewToHotel(selectedHotel.id, reviewToAdd)
+        HotelService.addReviewToHotel(selectedHotel.id, reviewToAdd)
                 .then(newReview => {
                     setReviewsOfHotel([...reviewsOfHotel, newReview]);
                     setReview('');
@@ -80,7 +82,7 @@ export default function Content({ selectedHotel, roomsOfHotel, setRoomsOfHotel, 
                                             display: "flex"}}>
                 {selectedHotel && roomsOfHotel !== null && (
                     <>
-                    <Rooms roomsOfHotel={roomsOfHotel} setSelectedRoom={setSelectedRoom}/>                
+                    <Rooms roomsOfHotel={roomsOfHotel} setSelectedRoom={setSelectedRoom}/>
                     {selectedRoom !== null && (
                        <Reservations selectedRoom={selectedRoom}/>
                     )}

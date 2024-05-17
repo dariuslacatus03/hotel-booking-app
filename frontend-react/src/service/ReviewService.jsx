@@ -12,14 +12,5 @@ class ReviewService{
         }
     }
 
-    async addReviewToHotel(hotelId, review){
-        try {
-            const response = await axios.post('http://localhost:8080/api/reviews/' + hotelId +'/add-review', review);
-            return response.data;
-        } catch (error) {
-            throw error
-        }
-    }
-
 }
 export default new ReviewService

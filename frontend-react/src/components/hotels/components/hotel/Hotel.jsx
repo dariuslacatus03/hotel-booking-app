@@ -11,7 +11,10 @@ export default function Hotel({hotel}){
                     <Divider />
                 </h2>
             </CardContent>
-            <div className="total-rooms">Total rooms: {hotel.numberOfRooms}</div>
+            <div className="total-rooms">
+                Total rooms: {hotel.numberOfRooms} <br />
+                Total reviews: {hotel.numberOfReviews}
+            </div>
         </Card>
     )
 }

@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 import ReservationService from "../../service/ReservationService";
 import dayjs from "dayjs";
 import { Button } from "@mui/material";
+import RoomService from "../../service/RoomService";
 
 export default function Reservations({selectedRoom}){
     const [reservationsOfRoom, setReservationsOfRoom] = useState(null);
+    const [addErrorMessage, setAddErrorMessage] = useState(null);
     const [checkIn, setCheckIn] = useState(dayjs().hour(10).minute(0).second(0));
     const [checkOut, setCheckOut] = useState(dayjs().hour(10).minute(0).second(0));
-    const [addErrorMessage, setAddErrorMessage] = useState(null);
-
     useEffect(() => {
         if (selectedRoom) {
             ReservationService.getReservationsOfRoom(selectedRoom.id)
@@ -29,7 +29,7 @@ export default function Reservations({selectedRoom}){
             startDate: checkIn.format('YYYY-MM-DDTHH:mm:ss'),
             endDate: checkOut.format('YYYY-MM-DDTHH:mm:ss')
         };
-        ReservationService.addReservationToRoom(selectedRoom.id, reservation)
+        RoomService.addReservationToRoom(selectedRoom.id, reservation)
                 .then(newReservation => {
                     setReservationsOfRoom([...reservationsOfRoom, newReservation])
                     setAddErrorMessage(null);
@@ -45,6 +45,7 @@ export default function Reservations({selectedRoom}){
     return (
         <div className="reservations-layout">
             Make a rezervation for room {selectedRoom.roomNumber} <br />
+            Note: The hour of check-in/check-out is 10AM.<br />
             <DatePickerValue checkIn={checkIn} setCheckIn={setCheckIn} checkOut={checkOut} setCheckOut={setCheckOut}/>
             <Button onClick={handleReservationButton}>Make reservation</Button>
             {addErrorMessage !== null && (

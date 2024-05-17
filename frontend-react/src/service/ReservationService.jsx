@@ -11,15 +11,6 @@ class ReservationService{
         }
     }
 
-    async addReservationToRoom(roomId, reservation){
-        try {
-            const response = await axios.post('http://localhost:8080/api/reservations/' + roomId + '/add-reservation', reservation);
-            return response.data;
-        } catch (error) {
-            throw error
-        }
-    }
-
     async deleteReservation(reservationId){
         try {
             const response = await axios.delete('http://localhost:8080/api/reservations/delete/' + reservationId);
